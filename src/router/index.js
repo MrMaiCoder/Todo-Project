@@ -1,29 +1,54 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import store from '@/store';
+
+const Todos = () => import('@/components/Todo.vue');
+const Login = () => import('@/components/Login.vue');
+const Signup = () => import('@/components/Signup.vue');
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'todos',
+    component: Todos,
+    meta: {
+      requiredAuthentication: true,
+      roles: ['admin', 'user'],
+    },
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: {
+      requiredAuthentication: false,
+    },
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: Signup,
+    meta: {
+      requiredAuthentication: false,
+    },
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  mode: 'hash',
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiredAuthentication && !store.getters['auth/authenticated']) {
+    next({ name: 'login' });
+  } else {
+    next();
+  }
+});
+
+Vue.$router = router;
 
 export default router;
