@@ -1,5 +1,6 @@
 export default {
   state: {
+    currentTaskKey: null,
     task: null,
     todosRef: null,
   },
@@ -16,6 +17,9 @@ export default {
     setTodosRef(state, ref) {
       state.todosRef = ref;
     },
+    setCurrentTaskKey(state, key) {
+      state.currentTaskKey = key;
+    },
   },
   actions: {
     clearCompleted(context) {
@@ -30,6 +34,9 @@ export default {
     },
     setTodosRef(context, ref) {
       context.commit('setTodosRef', ref);
+    },
+    setCurrentTaskKey(context, key) {
+      context.commit('setCurrentTaskKey', key);
     },
   },
   getters: {

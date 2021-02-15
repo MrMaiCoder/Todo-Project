@@ -8,7 +8,7 @@
     </v-toolbar>
     <v-list style="height: 460px ; overflow-y: scroll">
       <template v-for="(task, key) in tasks">
-        <Task v-bind:key="key" :task="task" :index="key"/>
+        <Task v-bind:key="key" :task="task" :taskKey="key"/>
       </template>
     </v-list>
     <v-divider></v-divider>

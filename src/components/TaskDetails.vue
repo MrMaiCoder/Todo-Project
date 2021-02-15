@@ -46,7 +46,7 @@
         <v-card-actions>
           <v-btn text color="primary" @click="close">Close</v-btn>
           <v-spacer></v-spacer>
-          <v-btn text color="red" dark @click="() => removeTask(idx)">Remove Task</v-btn>
+          <v-btn text color="red" dark @click="() => removeTask()">Remove Task</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -62,13 +62,20 @@ export default {
     subtask: '',
     open: true,
     subtasks: store.state.todos.task.subtask,
+    todoKey: '',
   }),
   methods: {
     close() {
       this.$router.back();
     },
-    removeTask(idx) {
-      console.log(store.state.todos.todosRef.child(idx));
+    removeTask() {
+      const taskKey = store.state.todos.currentTaskKey;
+      const childRef = store.state.todos.todosRef.child(taskKey);
+      // childRef.on('value', (snapshot) => {
+      //   console.log(snapshot.val());
+      // });
+      childRef.remove();
+      // console.log(store.state.todos.todosRef.child(parent));
       this.$router.back();
     },
   },

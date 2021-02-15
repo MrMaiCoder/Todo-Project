@@ -19,16 +19,14 @@
 </template>
 
 <script>
-import store from '@/store';
-
 export default {
   name: 'task',
   data: () => ({
-    count: 3,
     subtasksLength: null,
   }),
   props: {
     task: Object,
+    taskKey: String,
   },
   mounted() {
     if (this.task.subtask === undefined) {
@@ -39,7 +37,8 @@ export default {
   },
   methods: {
     openTaskDetails() {
-      store.state.todos.task = this.task;
+      this.$store.dispatch('todos/setCurrentTaskKey', this.taskKey);
+      this.$store.dispatch('todos/setTask', this.task);
       this.$router.push({
         name: 'TaskDetails',
         params: { taskId: this.task.text },
