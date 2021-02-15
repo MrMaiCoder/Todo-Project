@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import store from '@/store';
+import firebase from '@/plugins/firebase';
 
 const Todos = () => import('@/components/Todo.vue');
 const Login = () => import('@/components/Login.vue');
 const Signup = () => import('@/components/Signup.vue');
+const TaskDetails = () => import('@/components/TaskDetails');
 
 Vue.use(VueRouter);
 
@@ -13,6 +14,13 @@ const routes = [
     path: '/',
     name: 'todos',
     component: Todos,
+    children: [
+      {
+        path: 'task/:taskId',
+        components: { TaskDetails },
+        name: 'TaskDetails',
+      },
+    ],
     meta: {
       requiredAuthentication: true,
       roles: ['admin', 'user'],
@@ -37,13 +45,17 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   routes,
+  base: '/',
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiredAuthentication && !store.getters['auth/authenticated']) {
-    next({ name: 'login' });
+router.beforeEach(async (to, from, next) => {
+  const requiresLogin = to.matched.some((record) => record.meta.requiredAuthentication);
+  if (requiresLogin && !await firebase.getCurrentUser()) {
+    next('login');
+  } else if (!requiresLogin && await firebase.getCurrentUser()) {
+    next('todos');
   } else {
     next();
   }

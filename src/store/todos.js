@@ -1,20 +1,20 @@
 export default {
   state: {
-    todos: [
-      { text: 'Learn JavaScript ES6+ goodies', isDone: true },
-      { text: 'Learn Vue', isDone: false },
-      { text: 'Build something awesome', isDone: false },
-    ],
+    task: null,
+    todosRef: null,
   },
   mutations: {
     addTodo(state, todo) {
       state.todos.push(todo);
     },
-    setTodos(state, todos) {
-      state.todos = todos;
+    setTask(state, task) {
+      state.task = task;
     },
     removeTodo(state, index) {
       state.todos.splice(index, 1);
+    },
+    setTodosRef(state, ref) {
+      state.todosRef = ref;
     },
   },
   actions: {
@@ -25,8 +25,11 @@ export default {
       const index = context.state.todos.indexOf(todo);
       context.commit('todos/removeTodo', index);
     },
-    createTodo(context, todo) {
-      context.commit('todos/addTodo', todo);
+    setTask(context, task) {
+      context.commit('setTask', task);
+    },
+    setTodosRef(context, ref) {
+      context.commit('setTodosRef', ref);
     },
   },
   getters: {

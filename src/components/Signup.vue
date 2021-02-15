@@ -9,7 +9,8 @@
           <v-card-text>
             <v-form>
               <v-alert
-                :value="error"
+                dark
+                v-model="error"
                 color="error"
                 icon="warning"
               >{{ errorMessage }}</v-alert>
@@ -70,7 +71,7 @@ export default {
       loading: false,
       rules: {
         required: (value) => !!value || 'Required',
-        confirm: (confirm) => confirm === this.password || 'Passwords are different',
+        confirm: (confirm) => confirm === this.password || 'Passwords do not match',
       },
     };
   },

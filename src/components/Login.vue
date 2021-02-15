@@ -7,15 +7,17 @@
               <v-toolbar-title>
                 Login
               </v-toolbar-title>
+            </v-app-bar>
+            <v-card-text>
               <v-alert class="mx-auto mt-auto"
-                color="error"
-                v-model="error"
-                dismissible
+                       dark
+                       color="error"
+                       v-model="error"
+                       icon="warning"
+                       dismissible
               >
                 The username or the password is incorrect.
               </v-alert>
-            </v-app-bar>
-            <v-card-text>
               <v-text-field
                 v-model="email"
                 prepend-icon="mdi-account-circle"
@@ -34,12 +36,14 @@
                 to="/signup"
                 rounded
                 color="pink darken-2"
-                dark>
+                dark
+              >
                 Sign up</v-btn>
               <v-spacer></v-spacer>
               <v-btn rounded color="pink" dark
                      :loading="loading"
-                     @click="doLogin()">
+                     @click="doLogin()"
+              >
                 Login
                 <v-icon>mdi-chevron-right</v-icon>
               </v-btn>
