@@ -3,7 +3,7 @@
   <v-list-item>
     <v-list-item-action>
       <v-btn icon @click.stop="openTaskDetails">
-        <v-icon color="pink">edit</v-icon>
+        <v-icon color="pink">mdi-circle-edit-outline</v-icon>
       </v-btn>
     </v-list-item-action>
     <v-list-item-content>
@@ -11,6 +11,9 @@
       <v-list-item-subtitle>This task has {{ subtasksLength }} subtasks left.</v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action-text>
+      <v-btn v-if="!task.isDone" icon>
+        <v-icon color="success">mdi-check</v-icon>
+      </v-btn>
       <v-progress-circular :value="20" v-if="!task.isDone"></v-progress-circular>
       <v-icon color="green" v-if="task.isDone">mdi-check-circle</v-icon>
     </v-list-item-action-text>
@@ -19,6 +22,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'task',
   data: () => ({

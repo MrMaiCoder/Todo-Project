@@ -23,7 +23,6 @@ export default {
       this.todosRef.push({
         text: this.taskText,
         isDone: false,
-        subtask: [],
       });
       this.taskText = '';
     },

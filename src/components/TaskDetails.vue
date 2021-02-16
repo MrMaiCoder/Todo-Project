@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">
-            Task title
+            {{ this.task }}
           </span>
         </v-card-title>
 
@@ -17,7 +17,7 @@
             label="Subtask"
             placeholder="Write your subtask here"
             ></v-textarea>
-            <v-btn color="success">Save</v-btn>
+            <v-btn color="success" >Save</v-btn>
           </v-form>
         </v-container>
         <v-list three-line subheader>
@@ -33,7 +33,7 @@
               </v-btn>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-item-title>{{ subtask.text }}</v-list-item-title>
+              <v-list-item-title>{{ subtask }}</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon>
@@ -59,11 +59,21 @@ import store from '@/store';
 export default {
   name: 'taskDetails',
   data: () => ({
-    subtask: '',
+    task: store.state.todos.task.text,
+    taskProperties: null,
     open: true,
-    subtasks: store.state.todos.task.subtask,
+    subtask: '',
+    subtasks: [],
     todoKey: '',
   }),
+  mounted() {
+    const taskKey = store.state.todos.currentTaskKey;
+    const childRef = store.state.todos.todosRef.child(taskKey);
+    childRef.on('value', (snapshot) => {
+      this.taskProperties = snapshot.val();
+    });
+    this.subtasks = this.taskProperties.subtask;
+  },
   methods: {
     close() {
       this.$router.back();
@@ -71,13 +81,26 @@ export default {
     removeTask() {
       const taskKey = store.state.todos.currentTaskKey;
       const childRef = store.state.todos.todosRef.child(taskKey);
-      // childRef.on('value', (snapshot) => {
-      //   console.log(snapshot.val());
-      // });
       childRef.remove();
-      // console.log(store.state.todos.todosRef.child(parent));
       this.$router.back();
     },
+    // doAddSubtask() {
+    //   console.log(this.subtasks);
+    //   if (this.subtasks === undefined) {
+    //     childRef.update({
+    //       subtask: [this.subtask],
+    //     });
+    //   } else {
+    //     const currentSubtasks = [];
+    //     childRef.on('value', (snapshot) => {
+    //
+    //     });
+    //
+    //     childRef.update({
+    //       subtask: [this.subtasks, this.subtask],
+    //     });
+    //   }
+    // },
   },
 };
 </script>
